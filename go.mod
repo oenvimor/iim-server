@@ -4,7 +4,6 @@ go 1.22
 
 replace (
 	github.com/iimeta/iim-sdk => ../iim-sdk
-	github.com/iimeta/iim-server => ../iim-server
 )
 
 require (
