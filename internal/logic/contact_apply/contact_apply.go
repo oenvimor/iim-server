@@ -113,6 +113,19 @@ func (s *sContactApply) Create(ctx context.Context, params model.ApplyCreateReq)
 	pipe.Publish(ctx, consts.ImTopicChat, gjson.MustEncodeString(body))
 	_, _ = redis.Pipelined(ctx, pipe)
 
+	// 如果对方是机器人，自动通过好友申请
+	robot, _ := dao.Robot.GetRobotByUserId(ctx, params.FriendId)
+	if robot != nil && robot.IsTalk == 1 {
+		_, _ = s.Accept(ctx, model.ApplyAcceptReq{
+			ContactApply: model.ContactApply{
+				ApplyId:  id,
+				UserId:   params.FriendId,
+				FriendId: uid,
+				Remark:   user.Nickname,
+			},
+		})
+	}
+
 	return id, nil
 }
 

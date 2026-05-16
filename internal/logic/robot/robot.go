@@ -3,6 +3,7 @@ package robot
 import (
 	"context"
 	"fmt"
+	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/os/grpool"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/iimeta/iim-client/internal/consts"
@@ -11,6 +12,7 @@ import (
 	"github.com/iimeta/iim-client/internal/model"
 	"github.com/iimeta/iim-client/internal/service"
 	"github.com/iimeta/iim-client/utility/logger"
+	redis2 "github.com/iimeta/iim-client/utility/redis"
 	"github.com/iimeta/iim-sdk/sdk"
 	"go.mongodb.org/mongo-driver/mongo"
 	"strings"
@@ -116,6 +118,15 @@ func (s *sRobot) RobotReply(ctx context.Context, uid int, textMessageReq *model.
 					} else {
 						message.Sid = session.Id
 					}
+
+					// 通知前端：机器人正在输入中
+					redis2.Publish(ctx, consts.ImTopicChat, gjson.MustEncodeString(map[string]any{
+						"event": consts.SubEventImMessageKeyboard,
+						"data": gjson.MustEncodeString(map[string]any{
+							"sender_id":   robot.UserId,
+							"receiver_id": receiverId,
+						}),
+					}))
 
 					content := ""
 					text, err := sdk.Robot.Text(ctx, robot, message)
