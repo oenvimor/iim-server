@@ -24,8 +24,6 @@ import (
 	"github.com/iimeta/iim-client/utility/middleware"
 	"github.com/iimeta/iim-client/utility/redis"
 	"net/http"
-
-	_ "github.com/iimeta/iim-server/server"
 )
 
 var (
