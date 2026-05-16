@@ -3,6 +3,7 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 COPY iim-sdk/ /iim-sdk/
+COPY iim-ws/ /iim-ws/
 COPY iim-server/go.mod iim-server/go.sum ./
 RUN go mod download
 
