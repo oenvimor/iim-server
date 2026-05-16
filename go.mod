@@ -2,9 +2,7 @@ module github.com/iimeta/iim-client
 
 go 1.22
 
-replace (
-	github.com/iimeta/iim-sdk => ../iim-sdk
-)
+replace github.com/iimeta/iim-sdk => ../iim-sdk
 
 require (
 	github.com/bwmarrin/snowflake v0.3.0
